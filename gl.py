@@ -25,9 +25,8 @@ class Renderer(object):
         self.bgColor = color(0,0,0)
         self.viewportBgColor = color(1,1,1)
         self.mainColor = color(0,0,0)
-        # self.bgColor = 0
-        # self.mainColor = 0
         self.glCreateWindow( width, height)
+        self.glViewPort(0,0,self.width,self.height)
         
 
 
@@ -54,13 +53,8 @@ class Renderer(object):
         self.mainColor = color(r,g,b)
 
     def glClear(self):
-        # print (self.mainColor)
         self.matrix = [[self.bgColor for x in range(self.width)] for y in range(self.height)]
-        # print ( " width " + str(self.width))
-        # print ( " height " + str(self.height))
-        # for x in range(self.width ) :
-        #     for y in range(self.height):
-        #         self.matrix[y][x] = self.bgColor
+        
 
 
     def glClearviewport(self):
@@ -69,11 +63,7 @@ class Renderer(object):
             for y in range (self.viewportY, self.viewportY+self.viewportH):
                 self.matrix[y][x] = self.viewportBgColor
 
-
-
-
-        #self.matrix = [[self.viewportBgColor for x in range(self.viewportX, self.viewportX+self.viewportW-1)] for y in range(self.viewportY, self.viewportY+self.viewportH-1)]
-
+        
 
 
     def glClearColor (self, r,g,b):
@@ -93,14 +83,11 @@ class Renderer(object):
     
     def glFinish(self,filename):
         with open(filename, "wb") as file:
-            # Header
             file.write(bytes('B'.encode('ascii')))
             file.write(bytes('M'.encode('ascii')))
             file.write(dword(14 + 40 + (self.width * self.height * 3)))
             file.write(dword(0))
             file.write(dword(14 + 40))
-
-            # InfoHeader
             file.write(dword(40))
             file.write(dword(self.width))
             file.write(dword(self.height))
@@ -112,8 +99,6 @@ class Renderer(object):
             file.write(dword(0))
             file.write(dword(0))
             file.write(dword(0))
-
-            # Color Table
             for y in range(self.height):
                 for x in range(self.width):
                     file.write(self.matrix[y][x])
