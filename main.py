@@ -2,16 +2,26 @@
 
 from gl import Renderer
 
-width = 16
-height = 10
-
-# def render(filename):
-#     with open(filename, "wb") as file :
-    
+width = 1920
+height = 1080
 
 
 myRenderer = Renderer(width, height)
+myRenderer.glColor(0.2,0.8,0.7)
 
-myRenderer.glVertex(0,1)
+def drawflag():
+    for x in range(int(width/3)):
+        myRenderer.glColor(0,0.47,0.7)
+        for y in range(height):
+            myRenderer.glVertex(x, y)
 
-myRenderer.show()
+    for x in range(int(width/3)):
+        myRenderer.glColor(0,0.47,0.7)
+        for y in range(height):
+            myRenderer.glVertex(x+int(2*width/3), y)
+    
+
+
+drawflag()
+#myRenderer.show()
+myRenderer.glFinish("output.bmp")
