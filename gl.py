@@ -32,19 +32,21 @@ class Renderer(object):
 
 
     def glCreateWindow (self, width, height):
-        self.width =width
-        self.height = height
+        self.width = int(width)
+        self.height = int(height)
         self.glClear()    
     
 
     def glViewPort(self, x = 0, y=0, width=1, height = 1):
-        self.viewportW =width
-        self.viewportH = height
-        self.viewportX = x
-        self.viewportY = y
+        self.viewportW = int(width)
+        self.viewportH = int(height)
+        self.viewportX = int(x)
+        self.viewportY = int(y)
         print("Viewport is defined from : " + str(x) + " , " + str(y) )
         print("To :  " + str(x+width) + " , " + str(y+height) )
+        self.glClear()
         self.glClearviewport()
+        
 
 
 
@@ -70,10 +72,21 @@ class Renderer(object):
         self.bgColor = color(r,g,b)
 
     def glVertex(self,x,y):
+        x=int(x)
+        y=int(y)
         if (x>= self.viewportX and x <= (self.viewportX+self.viewportW)  and   y>= self.viewportY and y <= self.viewportY+self.viewportH) :
             self.matrix[y][x] = self.mainColor
         # else :
         #     print("point out of viewport")
+
+
+    def glVertexNormalized(self,x,y):
+        #convertion
+        x = int((x+1)*(self.viewportW/2) +self.viewportX)
+        y = int((y+1)*(self.viewportH/2) + self.viewportY)
+
+        if (x>= self.viewportX and x <= (self.viewportX+self.viewportW)  and   y>= self.viewportY and y <= self.viewportY+self.viewportH) :
+            self.matrix[y][x] = self.mainColor
 
 
     def glColor(self, r,g,b):
