@@ -22,14 +22,15 @@ def color(r ,g ,b ):
 class Renderer(object):
     def __init__(self,width , height):
         self.black = color(0,0,0)
-        self.bgColor = color(1,1,1)
+        self.bgColor = color(0,0,0)
+        self.viewportBgColor = color(1,1,1)
         self.mainColor = color(0,0,0)
         # self.bgColor = 0
         # self.mainColor = 0
         self.glCreateWindow( width, height)
+        
 
-    def glInit(self):
-        pass
+
 
     def glCreateWindow (self, width, height):
         self.width =width
@@ -37,9 +38,16 @@ class Renderer(object):
         self.glClear()    
     
 
-    def glViewPort(self, width, height):
-        
-        pass
+    def glViewPort(self, x = 0, y=0, width=1, height = 1):
+        self.viewportW =width
+        self.viewportH = height
+        self.viewportX = x
+        self.viewportY = y
+        print("Viewport is defined from : " + str(x) + " , " + str(y) )
+        print("To :  " + str(x+width) + " , " + str(y+height) )
+        self.glClearviewport()
+
+
 
 
     def pickForegroundColor( self, r,g,b):
@@ -55,12 +63,27 @@ class Renderer(object):
         #         self.matrix[y][x] = self.bgColor
 
 
+    def glClearviewport(self):
+
+        for x in range (self.viewportX, self.viewportX+ self.viewportW):
+            for y in range (self.viewportY, self.viewportY+self.viewportH):
+                self.matrix[y][x] = self.viewportBgColor
+
+
+
+
+        #self.matrix = [[self.viewportBgColor for x in range(self.viewportX, self.viewportX+self.viewportW-1)] for y in range(self.viewportY, self.viewportY+self.viewportH-1)]
+
+
+
     def glClearColor (self, r,g,b):
         self.bgColor = color(r,g,b)
 
     def glVertex(self,x,y):
-        
-        self.matrix[y][x] = self.mainColor
+        if (x>= self.viewportX and x <= (self.viewportX+self.viewportW)  and   y>= self.viewportY and y <= self.viewportY+self.viewportH) :
+            self.matrix[y][x] = self.mainColor
+        # else :
+        #     print("point out of viewport")
 
 
     def glColor(self, r,g,b):
